@@ -5,6 +5,7 @@ object HelloWorldScalaXXXX {
    * main 方法名
    * args 形参名称
    * Array[String] args这个形参的数据类型,是String类型的数组 等同于java String[]
+   * :Unit 方法的返回值
    * @param args
    */
   def main(args: Array[String]): Unit = {
