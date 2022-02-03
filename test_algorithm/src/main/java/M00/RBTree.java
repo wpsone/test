@@ -45,6 +45,106 @@ public class RBTree {
         return k1;
     }
 
+    //寻找前驱
+    private Node preNode(Node tree) {
+        Node p = tree.left;
+        while (p.right != null) {
+            p=p.right;
+        }
+        return p;
+    }
+
+    public void erase(int val) {
+        root = erase(root,val);
+    }
+
+    private Node erase(Node tree,int val) {
+        tree = __erase(tree,val);
+        tree.color=1;
+        return tree;
+    }
+
+    private Node __erase(Node tree,int val) {
+        if (tree==NIL) return tree;
+        if (val<tree.val) {
+            tree.left = __erase(tree.left,val);
+        } else if (val > tree.val) {
+            tree.right=__erase(tree.right,val);
+        } else {
+            if (tree.left == NIL || tree.right == NIL) {
+                Node temp = tree.left == NIL ? tree.right:tree.left;
+                temp.color += tree.color;
+                tree=temp;
+                return tree;
+            } else {
+                Node temp = preNode(tree);
+                tree.val = temp.val;
+                tree.left = __erase(tree.left,temp.val);
+            }
+        }
+        return erase_maintion(tree);
+    }
+
+    private Node erase_maintion(Node tree) {
+        if (tree.left.color != 2 && tree.right.color != 2) return tree;
+        //兄弟为红，旋转树，新根节点转为⿊，原根节点转为红
+        if (has_red_child(tree) ){
+            int flag = 0;
+            tree.color = 0;
+            if (tree.left.color == 0) {
+                tree = right_rotate(tree);
+                flag=1;
+            } else {
+                tree=left_rotate(tree);
+            }
+            tree.color=1;
+            if (flag==1) tree.right = erase_maintion(tree.right);
+            else tree.left = erase_maintion(tree.left);
+            return tree;
+        }
+        //兄弟为⿊⾊并且没有红⾊⼦节点,⼦节点减⿊，根节点加⿊
+        if (tree.left.color == 1 && !has_red_child(tree.left)
+                || tree.right.color == 1 && !has_red_child(tree.right)) {
+            tree.color += 1;
+            tree.left.color-=1;
+            tree.right.color-=1;
+            return tree;
+        }
+        // 兄弟节点为⿊并且有红⾊⼦节点
+        //      |-- 左⼦树为⿊⾊
+        //          |-- 左⼦树的右⼦树为红⾊且左⼦树节点为⿊ LR
+        //              |-- ⼦树⼩左旋，新节点转⿊，原节点转红,进⼊LL形态
+        //          |-- 左⼦树的左⼦树为红⾊ LL
+        //              |-- 整树右旋，新节点改为原根节点的颜⾊，原根节点已经新叔叔节点转为⿊⾊
+        //      |-- 右⼦树为⿊⾊
+        //          |-- 右⼦树的左⼦树为红⾊且右⼦树节点为⿊ RL
+        //              |-- ⼦树⼩右旋，新节点转⿊，原节点转红,进⼊RR形态
+        //          |-- 右⼦树的右⼦树为红⾊ RR
+        //              |-- 整树左旋，新节点改为原根节点的颜⾊，原根节点已经新叔叔节点转为⿊⾊
+        if (tree.left.color == 1) {
+            tree.right.color=1;
+            if (tree.left.left.color != 0) {
+                tree.left.color=0;
+                tree.left=left_rotate(tree.left);
+                tree.left.color=1;
+            }
+            tree.left.color=tree.color;
+            tree=right_rotate(tree);
+        } else {
+            tree.left.color=1;
+            if (tree.right.right.color != 0) {
+                tree.right.color=0;
+                tree.right=right_rotate(tree.right);
+                tree.right.color=1;
+            }
+            tree.right.color=tree.color;
+            tree=left_rotate(tree);
+        }
+        tree.left.color=1;
+        tree.right.color=1;
+        return tree;
+    }
+
     private void insert(int val ) {
         root=insert(root,val);
     }
