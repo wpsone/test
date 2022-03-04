@@ -25,19 +25,41 @@ public class MinimumTotal120 {
 //    }
 
     //自底向上
+//    public int minimumTotal(List<List<Integer>> triangle) {
+//        int n = triangle.size();
+//        int[][] dp = new int[2][n];
+//        for (int i = 0; i < n; i++) {
+//            dp[(n-1)%2][i] = triangle.get(n-1).get(i);
+//        }
+//        for (int i = n-2; i >= 0; i--) {
+//            int ind = i % 2;
+//            int next_ind = (ind==0?1:0);
+//            for (int j = 0; j <= i; j++) {
+//                dp[ind][j]=Math.min(dp[next_ind][j],dp[next_ind][j+1])+triangle.get(i).get(j);
+//            }
+//        }
+//        return dp[0][0];
+//    }
+
+    //动态规划算法
     public int minimumTotal(List<List<Integer>> triangle) {
         int n = triangle.size();
-        int[][] dp = new int[2][n];
-        for (int i = 0; i < n; i++) {
-            dp[(n-1)%2][i] = triangle.get(n-1).get(i);
+        int[][] dp = new int[n][n];
+        for (int[] arr : dp) {
+            Arrays.fill(arr,Integer.MAX_VALUE);
         }
-        for (int i = n-2; i >= 0; i--) {
-            int ind = i % 2;
-            int next_ind = (ind==0?1:0);
+        dp[0][0] = triangle.get(0).get(0);
+        for (int i = 0; i < n - 1; i++) {
             for (int j = 0; j <= i; j++) {
-                dp[ind][j]=Math.min(dp[next_ind][j],dp[next_ind][j+1])+triangle.get(i).get(j);
+                dp[i+1][j]=Math.min(dp[i+1][j],dp[i][j]+triangle.get(i+1).get(j));
+                dp[i+1][j+1]=Math.min(dp[i+1][j+1],dp[i][j]+triangle.get(i+1).get(j+1));
             }
         }
-        return dp[0][0];
+        int ans = Integer.MAX_VALUE;
+        for (int x :
+                dp[n - 1]) {
+            ans = Math.min(x, ans);
+        }
+        return ans;
     }
 }
