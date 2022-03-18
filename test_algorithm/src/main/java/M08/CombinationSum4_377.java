@@ -7,7 +7,8 @@ public class CombinationSum4_377 {
         dp[0] = 1;
         for (int i = 1; i <= target; i++) {
             for (int num : nums) {
-                if (i<num) continue;
+//                if (i<num) continue;
+                if (i<num) break;//逻辑上快了
                 dp[i]+=dp[i-num];
             }
         }
