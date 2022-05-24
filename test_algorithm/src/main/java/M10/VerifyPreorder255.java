@@ -8,6 +8,7 @@ public class VerifyPreorder255 {
     int pre_ind;
 
     public boolean verifyPreorder(int[] preorder) {
+        //单调栈
         Deque<Integer> stack = new LinkedList<>();
         int pre = Integer.MIN_VALUE;
         for (int i = 0; i < preorder.length; i++) {
