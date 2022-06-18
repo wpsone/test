@@ -1,6 +1,6 @@
 package M10;
 
-import java.util.Arrays;
+import java.util.*;
 
 //1838. 最⾼频元素的频数
 public class MaxFrequency1938 {
@@ -22,6 +22,7 @@ public class MaxFrequency1938 {
                 while (sum[r]-sum[l]+k<nums[r-1]*(r-l)) l++;
             }
         }
+
         return ans;
     }
 }
