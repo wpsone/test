@@ -34,19 +34,33 @@ public class MinFlipsMonoIncr926 {
 //        return min;
 //    }
 
+//    public int minFlipsMonoIncr(String s) {
+//        int n = s.length();
+//        int[] dp = new int[2];
+//        dp[0] = s.charAt(0) - '0';
+//        dp[1] = 1 - dp[0];
+//        for (int i = 1; i < n; i++) {
+//            if (s.charAt(i)=='0') {
+//                dp[1] = Math.min(dp[1],dp[0]) + 1;
+//            } else {
+//                dp[1] = Math.min(dp[1],dp[0]);
+//                dp[0] += 1;
+//            }
+//        }
+//        return Math.min(dp[0],dp[1]);
+//    }
+
     public int minFlipsMonoIncr(String s) {
-        int n = s.length();
-        int[] dp = new int[2];
-        dp[0] = s.charAt(0) - '0';
-        dp[1] = 1 - dp[0];
-        for (int i = 1; i < n; i++) {
-            if (s.charAt(i)=='0') {
-                dp[1] = Math.min(dp[1],dp[0]) + 1;
-            } else {
-                dp[1] = Math.min(dp[1],dp[0]);
-                dp[0] += 1;
-            }
+        int ans,n0=0,n1=0;
+        for (char x : s.toCharArray()) {
+            if (x=='0') n0+=1;
         }
-        return Math.min(dp[0],dp[1]);
+        ans=n0;
+        for (char x : s.toCharArray()) {
+            if (x=='0') n0-=1;
+            else n1+=1;
+            ans = Math.min(ans,n0+n1);
+        }
+        return ans;
     }
 }
